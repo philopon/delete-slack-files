@@ -1,0 +1,47 @@
+{
+    "name": "slack-files",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Hirotomo Moriwaki <philopon.dependence@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "axios": "~0.17.1",
+        "body-parser": "~1.18.2",
+        "express": "~4.16.2",
+        "express-session": "~1.15.6"
+    },
+    "devDependencies": {
+        "@types/axios": "~0.14.0",
+        "@types/body-parser": "~1.16.8",
+        "@types/express": "~4.0.39",
+        "@types/express-session": "~1.15.6",
+        "@types/react": "~16.0.25",
+        "@types/react-dom": "~16.0.3",
+        "aurel": "~0.3.2",
+        "node-sass": "~4.7.2",
+        "npm-run-all": "~4.1.2",
+        "prettier": "~1.8.2",
+        "pug-cli": "~1.0.0-alpha6",
+        "react": "~16.1.1",
+        "react-dom": "~16.1.1",
+        "rollup": "~0.51.8",
+        "rollup-plugin-commonjs": "~8.2.6",
+        "rollup-plugin-json": "~2.3.0",
+        "rollup-plugin-node-resolve": "~3.0.0",
+        "rollup-plugin-replace": "~2.0.0",
+        "rollup-plugin-typescript": "~0.8.1",
+        "typescript": "~2.6.1"
+    },
+    "scripts": {
+        "build": "run-p build:*",
+        "build:ts": "tsc",
+        "build:pug": "pug pug -o static",
+        "build:sass": "node-sass sass -o static",
+        "build:bundle": "rollup -c",
+        "watch": "run-p watch:*",
+        "watch:ts": "run-s 'build:ts -w'",
+        "watch:pug": "run-s 'build:pug -w'",
+        "watch:sass": "aurel -w sass -s build:sass",
+        "watch:bundle": "run-s 'build:bundle -w'"
+    }
+}
