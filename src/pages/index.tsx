@@ -13,13 +13,13 @@ interface SlackFile {
 interface Props {}
 
 interface State {
-    error?: string;
+    errors: string[];
     files: SlackFile[];
     loading: boolean;
 }
 
 const initialState: State = {
-    error: undefined,
+    errors: [],
     files: [],
     loading: true,
 };
@@ -31,20 +31,13 @@ class App extends React.Component<Props, State> {
     }
 
     render() {
-        if (this.state.error) {
-            return (
-                <div>
-                    <h1>Error: {this.state.error}</h1>
-                    <a href="/">back</a>
-                </div>
-            );
-        }
         if (this.state.loading) {
             return <h1>loading...</h1>;
         }
         return (
             <div>
                 <h1>files to delete</h1>
+                <div>{this.state.errors.map((v, i) => <p key={i}>Error: {v}</p>)}</div>
                 <table>
                     <thead>
                         <tr>
@@ -71,7 +64,7 @@ class App extends React.Component<Props, State> {
     async componentDidMount() {
         const { data } = await axios.get("/files.list");
         if (!data.ok) {
-            this.setState({ error: data.error });
+            this.setState({ errors: [data.error] });
             return;
         }
         const files: SlackFile[] = data.files;
@@ -84,11 +77,12 @@ class App extends React.Component<Props, State> {
             return;
         }
         const resp = await axios.post("/files.delete", { id: file.id });
+
+        let errors = [...this.state.errors];
         if (!resp.data.ok) {
-            this.setState({ error: resp.data.error });
-            return;
+            errors.push(resp.data.error);
         }
-        this.setState({ files: this.state.files.slice(1) }, this.onClickDelete);
+        this.setState({ files: this.state.files.slice(1), errors }, this.onClickDelete);
     }
 }
 
